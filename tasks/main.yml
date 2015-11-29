@@ -22,11 +22,6 @@
     php_extension_conf_path: "{{ __php_extension_conf_path }}"
   when: php_extension_conf_path is not defined
 
-- name: Define php_apc_conf_filename.
-  set_fact:
-    php_apc_conf_filename: "{{ __php_apc_conf_filename }}"
-  when: php_apc_conf_filename is not defined
-
 - name: Define php_opcache_conf_filename.
   set_fact:
     php_opcache_conf_filename: "{{ __php_opcache_conf_filename }}"
@@ -37,16 +32,5 @@
 
 - include: setup-Debian.yml
   when: ansible_os_family == "Debian"
-
-- name: Check the installed version of PHP.
-  shell: '{{ php_executable }} -r "echo PHP_VERSION;"'
-  register: php_version
-  changed_when: false
-  always_run: yes
-
-- name: Disable opcache if PHP version is < 5.5.
-  set_fact:
-    php_opcache_enable: 0
-  when: "php_version.stdout.split('.')[0] == '5' and php_version.stdout.split('.')[1] < '5'"
 
 - include: configure.yml
