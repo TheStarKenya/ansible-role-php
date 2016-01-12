@@ -1,49 +1,48 @@
 ---
 php_ini_use_template: true
-# Decides whether PHP may expose the fact that it is installed on the server.
+# Decides whether PHP may expose the fact that it is installed on the server
 php_ini_expose_php: "On"
-# Maximum execution time of each script, in seconds.
+# Maximum execution time of each script, in seconds
 php_ini_max_execution_time: 30
-# Maximum amount of time each script may spend parsing request data.
+# Maximum amount of time each script may spend parsing request data
 php_ini_max_input_time: 60
-# How many GET/POST/COOKIE input variables may be accepted.
+# How many GET/POST/COOKIE input variables may be accepted
 php_ini_max_input_vars: 1000
-# Maximum amount of memory a script may consume.
+# Maximum amount of memory a script may consume
 php_ini_memory_limit: 128M
 # This directive informs PHP of which errors, warnings and notices you would
-# like it to take action for.
+# like it to take action for
 php_ini_error_reporting: E_ALL & ~E_DEPRECATED & ~E_STRICT
 # This directive controls whether or not and where PHP will output errors,
-# notices and warnings too.
+# notices and warnings too
 php_ini_display_errors: "Off"
 # The display of errors which occur during PHP's startup sequence are handled
-# separately from display_errors.
+# separately from display_errors
 php_ini_display_startup_errors: "Off"
-# Maximum size of POST data that PHP will accept.
+# Maximum size of POST data that PHP will accept
 php_ini_post_max_size: 8M
-# Determines the size of the realpath cache to be used by PHP.
+# Determines the size of the realpath cache to be used by PHP
 php_ini_realpath_cache_size: 16K
-# Maximum allowed size for uploaded files.
+# Maximum allowed size for uploaded files
 php_ini_upload_max_filesize: 2M
-# Defines the default timezone used by the date functions.
+# Defines the default timezone used by the date functions
 php_ini_date_timezone: America/Chicago
 php_ini_sendmail_path: /usr/sbin/sendmail -t -i
 php_ini_other: []
 
 php_opcache_ini_use_template: false
-php_opcache_ini_file: 10-opcache.ini
 php_opcache_ini_zend_extension: opcache.so
-# Determines if Zend OPCache is enabled.
+# Determines if Zend OPCache is enabled
 php_opcache_ini_enable: 1
-# The OPcache shared memory storage size.
+# The OPcache shared memory storage size
 php_opcache_ini_memory_consumption: 128
-# The amount of memory for interned strings in Mbytes.
+# The amount of memory for interned strings in Mbytes
 php_opcache_ini_interned_strings_buffer: 8
 # The maximum number of keys (scripts) in the OPcache hash table. Only numbers
-# between 200 and 100000 are allowed.
+# between 200 and 100000 are allowed
 php_opcache_ini_max_accelerated_files: 4000
 # The location of the OPcache blacklist file (wildcards allowed). Each OPcache
 # blacklist file is a text file that holds the names of files that should not
-# be accelerated.
+# be accelerated
 php_opcache_ini_blacklist_filename: /etc/php.d/opcache*.blacklist
 php_opcache_ini_other: []

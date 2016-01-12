@@ -1,194 +1,148 @@
 # Ansible Role: PHP
 
-[![Build Status](https://travis-ci.org/geerlingguy/ansible-role-php.svg?branch=master)](https://travis-ci.org/geerlingguy/ansible-role-php)
+[![Build Status](https://img.shields.io/travis/rwanyoike/ansible-role-php.svg)](https://travis-ci.org/rwanyoike/ansible-role-php) [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/rwanyoike/ansible-role-php/master/LICENSE)
 
-Installs PHP on RedHat/CentOS and Debian/Ubuntu servers.
+Installs and configures PHP on RHEL/CentOS ~~or Debian/Ubuntu~~.
 
 ## Requirements
 
-Must be running a separate web server, such as Nginx or Apache.
+None
 
 ## Role Variables
 
 Available variables are listed below, along with default values (see `defaults/main.yml`):
 
-    php_packages: []
+```yaml
+php_ini_use_template: true
+# Decides whether PHP may expose the fact that it is installed on the server
+php_ini_expose_php: "On"
+# Maximum execution time of each script, in seconds
+php_ini_max_execution_time: 30
+# Maximum amount of time each script may spend parsing request data
+php_ini_max_input_time: 60
+# How many GET/POST/COOKIE input variables may be accepted
+php_ini_max_input_vars: 1000
+# Maximum amount of memory a script may consume
+php_ini_memory_limit: 128M
+# This directive informs PHP of which errors, warnings and notices you would
+# like it to take action for
+php_ini_error_reporting: E_ALL & ~E_DEPRECATED & ~E_STRICT
+# This directive controls whether or not and where PHP will output errors,
+# notices and warnings too
+php_ini_display_errors: "Off"
+# The display of errors which occur during PHP's startup sequence are handled
+# separately from display_errors
+php_ini_display_startup_errors: "Off"
+# Maximum size of POST data that PHP will accept
+php_ini_post_max_size: 8M
+# Determines the size of the realpath cache to be used by PHP
+php_ini_realpath_cache_size: 16K
+# Maximum allowed size for uploaded files
+php_ini_upload_max_filesize: 2M
+# Defines the default timezone used by the date functions
+php_ini_date_timezone: America/Chicago
+php_ini_sendmail_path: /usr/sbin/sendmail -t -i
+php_ini_other: []
 
-A list of the PHP packages to install (OS-specific by default). You'll likely want to install common packages like `php`, `php-cli`, `php-devel` and `php-pdo`, and you can add in whatever other packages you'd like (for example, `php-gd` for image manipulation, or `php-ldap` if you need to connect to an LDAP server for authentication).
-
-    php_enable_webserver: true
-
-If your usage of PHP is tied to a web server (e.g. Apache or Nginx), leave this default value. If you are using PHP server-side or to run some small application, set this value to `false` so this role doesn't attempt to interact with a web server.
-
-    php_webserver_daemon: "httpd"
-
-The default values for the HTTP server deamon are `httpd` (used by Apache) for RedHat/CentOS, or `apache2` (also used by Apache) for Debian/Ubuntu. If you are running another webserver (for example, `nginx`), change this value to the name of the daemon under which the webserver runs.
-
-    php_enablerepo: ""
-
-(RedHat/CentOS only) If you have enabled any additional repositories (might I suggest geerlingguy.repo-epel or geerlingguy.repo-remi), those repositories can be listed under this variable (e.g. `remi,epel`). This can be handy, as an example, if you want to install the latest version of PHP 5.4, which is in the Remi repository.
-
-    php_executable: "php"
-
-The executable to run when calling PHP from the command line. You should only change this if running `php` on your server doesn't target the correct executable, or if you're using software collections on RHEL/CentOS and need to target a different version of PHP.
-
-### PHP-FPM
-
-PHP-FPM is a simple and robust FastCGI Process Manager for PHP. It can dramatically ease scaling of PHP apps and is the normal way of running PHP-based sites and apps when using a webserver like Nginx (though it can be used with other webservers just as easily).
-
-When using this role with PHP running as `php-fpm` instead of as a process inside a webserver (e.g. Apache's `mod_php`), you need to set the following variable to `true`:
-
-    php_enable_php_fpm: false
-
-You will also need to override the default `php_packages` list and add `php-fpm` (RedHat/CentOS) or `php5-fpm` (Debian/Ubuntu) to the list.
-
-This role does not manage fpm-specific www pool configuration (found in `/etc/php-fpm.d/www.conf` on RedHat/CentOS and `/etc/php5/fpm/pool.d/www.conf` on Debian/Ubuntu), but rather allows you to manage those files on your own. If you change that file, remember to notify the `restart php-fpm` handler so PHP picks up the new settings once in place. Settings like `pm.max_children` and other `pm.*` settings can have a dramatic impact on server performance, and should be tuned specifically for each application and server configuration.
-
-### php.ini settings
-
-    php_use_managed_ini: true
-
-By default, all the extra defaults below are applied through the php.ini included with this role. You can self-manage your php.ini file (if you need more flexility in its configuration) by setting this to `false` (in which case all the below variables will be ignored).
-
-    php_memory_limit: "256M"
-    php_max_execution_time: "60"
-    php_max_input_time: "60"
-    php_max_input_vars: "1000"
-    php_realpath_cache_size: "32K"
-    php_upload_max_filesize: "64M"
-    php_post_max_size: "32M"
-    php_date_timezone: "America/Chicago"
-    php_sendmail_path: "/usr/sbin/sendmail -t -i"
-    php_short_open_tag: false
-    php_error_reporting: "E_ALL & ~E_DEPRECATED & ~E_STRICT"
-    php_display_errors: "Off"
-    php_display_startup_errors: "On"
-    php_expose_php: "On"
-
-Various defaults for PHP. Only used if `php_use_managed_ini` is set to `true`.
-
-### OpCache-related Variables
-
-The OpCache is included in PHP starting in version 5.5, and the following variables will only take effect if the version of PHP you have installed is 5.5 or greater.
-
-    php_opcache_enabled_in_ini: false
-
-When installing Opcache, depending on the system and whether running PHP as a webserver module or standalone via `php-fpm`, you might need the line `extension=opcache.so` in `opcache.ini`. If you need that line added (e.g. you're running `php-fpm`), set this variable to true.
-
-    php_opcache_enable: "1"
-    php_opcache_enable_cli: "0"
-    php_opcache_memory_consumption: "96"
-    php_opcache_interned_strings_buffer: "16"
-    php_opcache_max_accelerated_files: "4096"
-    php_opcache_max_wasted_percentage: "5"
-    php_opcache_validate_timestamps: "1"
-    php_opcache_revalidate_freq: "2"
-    php_opcache_max_file_size: "0"
-
-OpCache ini directives that are often customized on a system. Make sure you have enough memory and file slots allocated in the OpCache (`php_opcache_memory_consumption`, in MB, and `php_opcache_max_accelerated_files`) to contain all the PHP code you are running. If not, you may get less-than-optimal performance!
-
-    php_opcache_conf_filename: [platform-specific]
-
-The platform-specific opcache configuration filename. Generally the default should work, but in some cases, you may need to override the filename.
-
-### APC-related Variables
-
-    php_enable_apc: true
-
-Whether to enable APC. Other APC variables will be ineffective if this is set to false.
-
-    php_apc_enabled_in_ini: false
-
-When installing APC, depending on the system and whether running PHP as a webserver module or standalone via `php-fpm`, you might need the line `extension=apc.so` in `apc.ini`. If you need that line added (e.g. you're running `php-fpm`), set this variable to true.
-
-    php_apc_cache_by_default: "1"
-    php_apc_shm_size: "96M"
-    php_apc_stat: "1"
-    php_apc_enable_cli: "0"
-
-APC ini directives that are often customized on a system. Set `php_apc_cache_by_default` to 0 to disable APC by default (so you could just enable it for one codebase if you have a *lot* of code on a server). Set the `php_apc_shm_size` so it will hold all your application code in memory with a little overhead (fragmentation or APC running out of memory will slow down PHP *dramatically*).
-
-    php_apc_conf_filename: [platform-specific]
-
-The platform-specific APC configuration filename. Generally the default should work, but in some cases, you may need to override the filename.
-
-#### Ensuring APC is installed
-
-If you use APC, you will need to make sure APC is installed (it is installed by default, but if you customize the `php_packages` list, you need to include APC in the list):
-
-  - *On RHEL/CentOS systems*: Make sure `php-pecl-apc` is in the list of `php_packages`.
-  - *On Debian/Ubuntu systems*: Make sure `php-apc` is in the list of `php_packages`.
-
-You can also install APC via `pecl`, but it's simpler to manage the installation with the system's package manager.
-
-### Installing from Source
-
-If you need a specific version of PHP, or would like to test the latest (e.g. master) version of PHP, there's a good chance there's no suitable package already available in your platform's package manager. In these cases, you may choose to install PHP from source by compiling it directly.
-
-Note that source compilation takes *much* longer than installing from packages (PHP HEAD takes 5+ minutes to compile on a modern quad-core computer, just as a point of reference).
-
-    php_install_from_source: false
-
-Set this to `true` to install PHP from source instead of installing from packages.
-
-    php_source_version: "master"
-
-The version of PHP to install from source (a git branch, tag, or commit hash).
-
-    php_source_clone_dir: "~/php-src"
-    php_source_install_path: "/opt/php"
-    php_source_install_gmp_path: "/usr/include/x86_64-linux-gnu/gmp.h"
-
-Location where source will be cloned and installed, and the location of the GMP header file (which can be platform/distribution specific).
-
-    php_source_make_command: "make"
-
-Set the `make` command to `make --jobs=X` where `X` is the number of cores present on the server where PHP is being compiled. Will speed up compilation times dramatically if you have multiple cores.
-
-    php_source_configure_command: >
-      [...]
-
-The `./configure` command that will build the Makefile to be used for PHP compilation. Add in all the options you need for your particular environment. Using a folded scalar (`>`) allows you to define the variable over multiple lines, which is extremely helpful for legibility and source control!
-
-A few other notes/caveats for specific configurations:
-
-  - **Apache with `mpm_prefork`**: If you're using Apache with prefork as a webserver for PHP, you will need to make sure `apxs2` is available on your system (e.g. by installing `apache2-prefork-dev` in Ubuntu), and you will need to make sure the option `--with-apxs2` is defined in `php_source_configure_command`. Finally, you will need to make sure the `mpm_prefork` module is loaded instead of `mpm_worker` or `mpm_event`, and likely add a `phpX.conf` (where `X` is the major version of PHP) configuration file to the Apache module config folder with contents like [`php7.conf`](https://gist.github.com/geerlingguy/5ae5445f28e71264e8c1).
-  - **Apache with `mpm_event` or `mpm_worker`**: If you're using Apache with event or worker as a webserver for PHP, you will need to compile PHP with FPM. Make sure the option `--enable-fpm` is defined in `php_source_configure_command`. You'll also need to make sure Apache's support for CGI and event is installed (e.g. by installing `apache2-mpm-event` and `libapache2-mod-fastcgi`) and the `mpm_event` module is loaded.
-  - **Nginx**: If you're using Nginx as a webserver for PHP, you will need to compile PHP with FPM. Make sure the option `--enable-fpm` is defined in `php_source_configure_command`.
+php_opcache_ini_use_template: false
+php_opcache_ini_zend_extension: opcache.so
+# Determines if Zend OPCache is enabled
+php_opcache_ini_enable: 1
+# The OPcache shared memory storage size
+php_opcache_ini_memory_consumption: 128
+# The amount of memory for interned strings in Mbytes
+php_opcache_ini_interned_strings_buffer: 8
+# The maximum number of keys (scripts) in the OPcache hash table. Only numbers
+# between 200 and 100000 are allowed
+php_opcache_ini_max_accelerated_files: 4000
+# The location of the OPcache blacklist file (wildcards allowed). Each OPcache
+# blacklist file is a text file that holds the names of files that should not
+# be accelerated
+php_opcache_ini_blacklist_filename: /etc/php.d/opcache*.blacklist
+php_opcache_ini_other: []
+```
 
 ## Dependencies
 
-None.
+None
 
 ## Example Playbook
 
-    - hosts: webservers
-      vars_files:
-        - vars/main.yml
-      roles:
-        - { role: geerlingguy.php }
+```yaml
+- hosts: servers
 
-*Inside `vars/main.yml`*:
+  vars_files:
+    - vars/main.yml
 
-    php_memory_limit: "128M"
-    php_max_execution_time: "90"
-    php_upload_max_filesize: "256M"
-    php_packages:
-      - php
-      - php-cli
-      - php-common
-      - php-devel
-      - php-gd
-      - php-mbstring
-      - php-pdo
-      - php-pecl-apc
-      - php-xml
-      ...
+  roles:
+    - role: rwanyoike.php
+```
+
+Inside `vars/main.yml`:
+
+```yaml
+php_opcache_ini_other:
+  # The maximum percentage of "wasted" memory until a restart is scheduled
+  - max_wasted_percentage=5
+  # When this directive is enabled, the OPcache appends the current working
+  # directory to the script key, thus eliminating possible collisions between
+  # files with the same name (basename). Disabling the directive improves
+  # performance, but may break existing applications
+  - use_cwd=1
+  # When disabled, you must reset the OPcache manually or restart the
+  # webserver for changes to the filesystem to take effect
+  - validate_timestamps=1
+  # How often (in seconds) to check file timestamps for changes to the shared
+  # memory storage allocation. ("1" means validate once per second, but only
+  # once per request. "0" means always validate)
+  - revalidate_freq=2
+  # Enables or disables file search in include_path optimization
+  - revalidate_path=0
+  # If disabled, all PHPDoc comments are dropped from the code to reduce the
+  # size of the optimized code
+  - save_comments=1
+  # If disabled, PHPDoc comments are not loaded from SHM, so "Doc Comments"
+  # may be always stored (save_comments=1), but not loaded by applications
+  # that don't need them anyway
+  - load_comments=1
+  # If enabled, a fast shutdown sequence is used for the accelerated code
+  - fast_shutdown=0
+  # Allow file existence override (file_exists, etc.) performance feature
+  - enable_file_override=0
+  # A bitmask, where each bit enables or disables the appropriate OPcache
+  # passes
+  - optimization_level=0xffffffff
+  - inherited_hack=1
+  - dups_fix=0
+  # Allows exclusion of large files from being cached. By default all files
+  # are cached
+  - max_file_size=0
+  # Check the cache checksum each N requests. The default value of "0" means
+  # that the checks are disabled
+  - consistency_checks=0
+  # How long to wait (in seconds) for a scheduled restart to begin if the cache
+  # is not being accessed
+  - force_restart_timeout=180
+  # OPcache error_log file name. Empty string assumes "stderr"
+  - error_log=
+  # All OPcache errors go to the Web server log. By default, only fatal errors
+  # (level 0) or errors (level 1) are logged. You can also enable warnings
+  # (level 2), info messages (level 3) or debug messages (level 4)
+  - log_verbosity_level=1
+  # Preferred Shared Memory back-end. Leave empty and let the system decide
+  - preferred_memory_model=
+  # Protect the shared memory from unexpected writing during script execution.
+  # Useful for internal debugging only
+  - protect_memory=0
+
+# ... etc ...
+```
 
 ## License
 
-MIT / BSD
+MIT
 
 ## Author Information
 
-This role was created in 2014 by [Jeff Geerling](http://jeffgeerling.com/), author of [Ansible for DevOps](http://ansiblefordevops.com/).
+- This role was created in 2014 by [Jeff Geerling](http://jeffgeerling.com/), author of [Ansible for DevOps](http://ansiblefordevops.com/).
+- This role was forked in 2015 by [Raymond Wanyoike](https://github.com/rwanyoike).

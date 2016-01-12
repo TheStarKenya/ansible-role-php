@@ -5,19 +5,19 @@ zend_extension={{ php_opcache_ini_zend_extension }}
 ; Determines if Zend OPCache is enabled
 opcache.enable={{ php_opcache_ini_enable }}
 
-; The OPcache shared memory storage size.
+; The OPcache shared memory storage size
 opcache.memory_consumption={{ php_opcache_ini_memory_consumption }}
 
-; The amount of memory for interned strings in Mbytes.
+; The amount of memory for interned strings in Mbytes
 opcache.interned_strings_buffer={{ php_opcache_ini_interned_strings_buffer }}
 
-; The maximum number of keys (scripts) in the OPcache hash table.
-; Only numbers between 200 and 100000 are allowed.
+; The maximum number of keys (scripts) in the OPcache hash table. Only numbers
+; between 200 and 100000 are allowed
 opcache.max_accelerated_files={{ php_opcache_ini_max_accelerated_files }}
 
-; The location of the OPcache blacklist file (wildcards allowed).
-; Each OPcache blacklist file is a text file that holds the names of files
-; that should not be accelerated.
+; The location of the OPcache blacklist file (wildcards allowed). Each OPcache
+; blacklist file is a text file that holds the names of files that should not
+; be accelerated
 opcache.blacklist_filename={{ php_opcache_ini_blacklist_filename }}
 
 {% for item in php_opcache_ini_other %}

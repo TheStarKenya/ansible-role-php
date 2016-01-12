@@ -1,3 +1,5 @@
+; PHP configuration
+
 [PHP]
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -21,20 +23,20 @@ zend.enable_gc = On
 ; Miscellaneous                                                               ;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-; Decides whether PHP may expose the fact that it is installed on the server.
+; Decides whether PHP may expose the fact that it is installed on the server
 expose_php = {{ php_ini_expose_php }}
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Resource Limits                                                             ;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-; Maximum execution time of each script, in seconds.
+; Maximum execution time of each script, in seconds
 max_execution_time = {{ php_ini_max_execution_time }}
-; Maximum amount of time each script may spend parsing request data.
+; Maximum amount of time each script may spend parsing request data
 max_input_time = {{ php_ini_max_input_time }}
-; How many GET/POST/COOKIE input variables may be accepted.
+; How many GET/POST/COOKIE input variables may be accepted
 max_input_vars = {{ php_ini_max_input_vars }}
-; Maximum amount of memory a script may consume.
+; Maximum amount of memory a script may consume
 memory_limit = {{ php_ini_memory_limit }}
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -42,13 +44,13 @@ memory_limit = {{ php_ini_memory_limit }}
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ; This directive informs PHP of which errors, warnings and notices you would
-; like it to take action for.
+; like it to take action for
 error_reporting = {{ php_ini_error_reporting }}
 ; This directive controls whether or not and where PHP will output errors,
-; notices and warnings too.
+; notices and warnings too
 display_errors = {{ php_ini_display_errors }}
 ; The display of errors which occur during PHP's startup sequence are handled
-; separately from display_errors.
+; separately from display_errors
 display_startup_errors = {{ php_ini_display_startup_errors }}
 log_errors = On
 log_errors_max_len = 1024
@@ -66,7 +68,7 @@ variables_order = "GPCS"
 request_order = "GP"
 register_argc_argv = Off
 auto_globals_jit = On
-; Maximum size of POST data that PHP will accept.
+; Maximum size of POST data that PHP will accept
 post_max_size = {{ php_ini_post_max_size }}
 auto_prepend_file =
 auto_append_file =
@@ -80,7 +82,7 @@ default_charset = "UTF-8"
 doc_root =
 user_dir =
 enable_dl = Off
-; Determines the size of the realpath cache to be used by PHP.
+; Determines the size of the realpath cache to be used by PHP
 realpath_cache_size = {{ php_ini_realpath_cache_size }}
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -88,7 +90,7 @@ realpath_cache_size = {{ php_ini_realpath_cache_size }}
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 file_uploads = On
-; Maximum allowed size for uploaded files.
+; Maximum allowed size for uploaded files
 upload_max_filesize = {{ php_ini_upload_max_filesize }}
 max_file_uploads = 20
 
@@ -108,7 +110,7 @@ default_socket_timeout = 60
 cli_server.color = On
 
 [Date]
-; Defines the default timezone used by the date functions.
+; Defines the default timezone used by the date functions
 date.timezone = {{ php_ini_date_timezone }}
 
 [Pdo_mysql]

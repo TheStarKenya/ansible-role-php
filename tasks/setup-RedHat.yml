@@ -1,8 +1,8 @@
 ---
-- name: Define php_enablerepo.
+- name: define php_enablerepo
   set_fact: php_enablerepo={{ __php_enablerepo }}
   when: php_enablerepo is not defined
 
-- name: Install PHP packages.
-  yum: name={{ item }} state=installed enablerepo={{ php_enablerepo }}
+- name: install php packages
+  yum: name={{ item }} state=present enablerepo={{ php_enablerepo }}
   with_items: php_packages
