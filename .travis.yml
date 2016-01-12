@@ -3,8 +3,7 @@ language: python
 python: "2.7"
 
 env:
-  - SITE=test-install-package.yml
-  - SITE=test-install-from-source.yml
+  - SITE=test.yml
 
 before_install:
   - sudo apt-get update -qq
@@ -21,24 +20,21 @@ script:
   - "ansible-playbook -i tests/inventory tests/$SITE --syntax-check"
 
   # Run the role/playbook with ansible-playbook.
-  - "ansible-playbook -i tests/inventory tests/$SITE --connection=local --sudo"
+  # - "ansible-playbook -i tests/inventory tests/$SITE --connection=local --sudo"
 
   # Run the role/playbook again, checking to make sure it's idempotent.
-  - >
-    ansible-playbook -i tests/inventory tests/$SITE --connection=local --sudo
-    | grep -q 'changed=0.*failed=0'
-    && (echo 'Idempotence test: pass' && exit 0)
-    || (echo 'Idempotence test: fail' && exit 1)
-
-  # Run the role/playbook in --check mode.
-  - "ansible-playbook -i tests/inventory tests/$SITE --connection=local --sudo --check"
+  # - >
+  #   ansible-playbook -i tests/inventory tests/$SITE --connection=local --sudo
+  #   | grep -q "changed=0.*failed=0"
+  #   && (echo "Idempotence test: pass" && exit 0)
+  #   || (echo "Idempotence test: fail" && exit 1)
 
   # Make sure PHP is available.
-  - >
-    php -v
-    | grep -q 'The PHP Group'
-    && (echo 'PHP is installed' && exit 0)
-    || (echo 'PHP is not installed' && exit 1)
+  # - >
+  #   php -v
+  #   | grep -q "The PHP Group"
+  #   && (echo "PHP is installed" && exit 0)
+  #   || (echo "PHP is not installed" && exit 1)
 
   # And for posterity...
-  - php -v
+  # - php -v

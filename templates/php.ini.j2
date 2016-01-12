@@ -1,47 +1,55 @@
 [PHP]
 
-;;;;;;;;;;;;;;;;;;;;
-; Language Options ;
-;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Language Options                                                            ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 engine = On
-short_open_tag = {{ php_short_open_tag }}
+short_open_tag = Off
 asp_tags = Off
 precision = 14
 output_buffering = 4096
-
 zlib.output_compression = Off
-
 implicit_flush = Off
 unserialize_callback_func =
 serialize_precision = 17
 disable_functions =
 disable_classes =
-
 zend.enable_gc = On
 
-;;;;;;;;;;;;;;;;;
-; Miscellaneous ;
-;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Miscellaneous                                                               ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-expose_php = {{ php_expose_php }}
+; Decides whether PHP may expose the fact that it is installed on the server.
+expose_php = {{ php_ini_expose_php }}
 
-;;;;;;;;;;;;;;;;;;;
-; Resource Limits ;
-;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Resource Limits                                                             ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-max_execution_time = {{ php_max_execution_time }}
-max_input_time = {{ php_max_input_time }}
-max_input_vars = {{ php_max_input_vars }}
-memory_limit = {{ php_memory_limit }}
+; Maximum execution time of each script, in seconds.
+max_execution_time = {{ php_ini_max_execution_time }}
+; Maximum amount of time each script may spend parsing request data.
+max_input_time = {{ php_ini_max_input_time }}
+; How many GET/POST/COOKIE input variables may be accepted.
+max_input_vars = {{ php_ini_max_input_vars }}
+; Maximum amount of memory a script may consume.
+memory_limit = {{ php_ini_memory_limit }}
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-; Error handling and logging ;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Error Handling and Logging                                                  ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-error_reporting = {{ php_error_reporting }}
-display_errors = {{ php_display_errors }}
-display_startup_errors = {{ php_display_startup_errors }}
+; This directive informs PHP of which errors, warnings and notices you would
+; like it to take action for.
+error_reporting = {{ php_ini_error_reporting }}
+; This directive controls whether or not and where PHP will output errors,
+; notices and warnings too.
+display_errors = {{ php_ini_display_errors }}
+; The display of errors which occur during PHP's startup sequence are handled
+; separately from display_errors.
+display_startup_errors = {{ php_ini_display_startup_errors }}
 log_errors = On
 log_errors_max_len = 1024
 ignore_repeated_errors = Off
@@ -50,71 +58,65 @@ report_memleaks = On
 track_errors = Off
 html_errors = On
 
-;;;;;;;;;;;;;;;;;
-; Data Handling ;
-;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Data Handling                                                               ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 variables_order = "GPCS"
 request_order = "GP"
 register_argc_argv = Off
 auto_globals_jit = On
-
-post_max_size = {{ php_post_max_size }}
+; Maximum size of POST data that PHP will accept.
+post_max_size = {{ php_ini_post_max_size }}
 auto_prepend_file =
 auto_append_file =
-
 default_mimetype = "text/html"
+default_charset = "UTF-8"
 
-;;;;;;;;;;;;;;;;;;;;;;;;;
-; Paths and Directories ;
-;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Paths and Directories                                                       ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 doc_root =
 user_dir =
-
 enable_dl = Off
+; Determines the size of the realpath cache to be used by PHP.
+realpath_cache_size = {{ php_ini_realpath_cache_size }}
 
-realpath_cache_size = {{ php_realpath_cache_size }}
-
-;;;;;;;;;;;;;;;;
-; File Uploads ;
-;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; File Uploads                                                                ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 file_uploads = On
-upload_max_filesize = {{ php_upload_max_filesize }}
+; Maximum allowed size for uploaded files.
+upload_max_filesize = {{ php_ini_upload_max_filesize }}
 max_file_uploads = 20
 
-;;;;;;;;;;;;;;;;;;
-; Fopen wrappers ;
-;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Fopen Wrappers                                                              ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 allow_url_fopen = On
 allow_url_include = Off
-
 default_socket_timeout = 60
 
-;;;;;;;;;;;;;;;;;;;
-; Module Settings ;
-;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Module Settings                                                             ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 [CLI Server]
 cli_server.color = On
 
 [Date]
-date.timezone = {{ php_date_timezone }}
+; Defines the default timezone used by the date functions.
+date.timezone = {{ php_ini_date_timezone }}
 
 [Pdo_mysql]
 pdo_mysql.cache_size = 2000
 pdo_mysql.default_socket=
 
 [mail function]
-; For Win32 only.
-SMTP = localhost
-smtp_port = 25
-
-; For Unix only.  You may supply arguments as well (default: "sendmail -t -i").
-sendmail_path = {{ php_sendmail_path }}
-
+sendmail_path = {{ php_ini_sendmail_path }}
 mail.add_x_header = On
 
 [SQL]
@@ -127,6 +129,14 @@ odbc.max_persistent = -1
 odbc.max_links = -1
 odbc.defaultlrl = 4096
 odbc.defaultbinmode = 1
+
+[Interbase]
+ibase.allow_persistent = 1
+ibase.max_persistent = -1
+ibase.max_links = -1
+ibase.timestampformat = "%Y-%m-%d %H:%M:%S"
+ibase.dateformat = "%Y-%m-%d"
+ibase.timeformat = "%H:%M:%S"
 
 [MySQL]
 mysql.allow_local_infile = On
@@ -166,39 +176,37 @@ pgsql.max_links = -1
 pgsql.ignore_notice = 0
 pgsql.log_notice = 0
 
+[Sybase-CT]
+sybct.allow_persistent = On
+sybct.max_persistent = -1
+sybct.max_links = -1
+sybct.min_server_severity = 10
+sybct.min_client_severity = 10
+
 [bcmath]
 bcmath.scale = 0
 
 [Session]
 session.save_handler = files
+session.use_strict_mode = 0
 session.use_cookies = 1
 session.use_only_cookies = 1
 session.name = PHPSESSID
 session.auto_start = 0
-
 session.cookie_lifetime = 0
 session.cookie_path = /
 session.cookie_domain =
 session.cookie_httponly =
-
 session.serialize_handler = php
-
 session.gc_probability = 1
 session.gc_divisor = 1000
 session.gc_maxlifetime = 1440
-
-session.bug_compat_42 = Off
-session.bug_compat_warn = Off
 session.referer_check =
-
 session.cache_limiter = nocache
 session.cache_expire = 180
-
 session.use_trans_sid = 0
-
 session.hash_function = 0
 session.hash_bits_per_character = 5
-
 url_rewriter.tags = "a=href,area=href,frame=src,input=src,form=fakeentry"
 
 [MSSQL]
@@ -207,7 +215,7 @@ mssql.max_persistent = -1
 mssql.max_links = -1
 mssql.min_error_severity = 10
 mssql.min_message_severity = 10
-mssql.compatability_mode = Off
+mssql.compatibility_mode = Off
 mssql.secure_connection = Off
 
 [Tidy]
@@ -221,3 +229,11 @@ soap.wsdl_cache_limit = 5
 
 [ldap]
 ldap.max_links = -1
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Other Settings                                                              ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+{% for item in php_ini_other %}
+{{ item }}
+{% endfor %}
