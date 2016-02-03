@@ -1,6 +1,6 @@
 # Ansible Role: PHP
 
-[![Build Status](https://img.shields.io/travis/rwanyoike/ansible-role-php.svg)](https://travis-ci.org/rwanyoike/ansible-role-php) [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/rwanyoike/ansible-role-php/master/LICENSE)
+[![Build Status](https://img.shields.io/travis/thestarkenya/ansible-role-php.svg)](https://travis-ci.org/thestarkenya/ansible-role-php) [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/thestarkenya/ansible-role-php/master/LICENSE)
 
 Installs and configures PHP on RHEL/CentOS ~~or Debian/Ubuntu~~.
 
@@ -75,7 +75,7 @@ None
     - vars/main.yml
 
   roles:
-    - role: rwanyoike.php
+    - role: ansible-role-php
 ```
 
 Inside `vars/main.yml`:
@@ -141,8 +141,3 @@ php_opcache_ini_other:
 ## License
 
 MIT
-
-## Author Information
-
-- This role was created in 2014 by [Jeff Geerling](http://jeffgeerling.com/), author of [Ansible for DevOps](http://ansiblefordevops.com/).
-- This role was forked in 2015 by [Raymond Wanyoike](https://github.com/rwanyoike).
